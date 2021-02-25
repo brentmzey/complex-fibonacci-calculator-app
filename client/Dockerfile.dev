@@ -1,6 +1,10 @@
 FROM node:alpine
-WORKDIR "/app"
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
+WORKDIR "/home/node/app"
+USER node
 COPY ./package.json ./
-RUN npm install
-COPY . .
-CMD ["npm", "run", "start"]
+USER node
+RUN yarn install 
+COPY --chown=node:node ./ ./
+USER node
+CMD ["yarn", "start"]
